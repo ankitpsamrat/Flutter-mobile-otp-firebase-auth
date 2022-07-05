@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "730078316714",
+    "project_id": "mobileotpauth-690ff",
+    "storage_bucket": "mobileotpauth-690ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730078316714:android:00ee66c429d5b0aaf828d3",
+        "android_client_info": {
+          "package_name": "com.example.mobile_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "730078316714-11dvdojvuo3v4u4q0mr4mbt7ilbc588d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuxI91duEYzxzn6LITcdjROmsBXYwtUoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "730078316714-11dvdojvuo3v4u4q0mr4mbt7ilbc588d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
