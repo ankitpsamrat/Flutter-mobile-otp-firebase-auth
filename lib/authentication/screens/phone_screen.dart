@@ -1,16 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '/authentication/common/widgets/snackbar_widgets.dart';
 
-class MyPhone extends StatefulWidget {
-  const MyPhone({super.key});
+class PhoneScreen extends StatefulWidget {
+  const PhoneScreen({super.key});
+
+  static String verify = '';
 
   @override
-  State<MyPhone> createState() => _MyPhoneState();
+  State<PhoneScreen> createState() => _PhoneScreenState();
 }
 
-class _MyPhoneState extends State<MyPhone> {
+class _PhoneScreenState extends State<PhoneScreen> {
   //  text controller
 
   final countrycode = TextEditingController();
+
+  var phone = '';
 
   @override
   void initState() {
@@ -22,31 +28,30 @@ class _MyPhoneState extends State<MyPhone> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 40),
+        margin: const EdgeInsets.symmetric(horizontal: 40),
         alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/images/img1.png',
                 width: 150,
                 height: 150,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Phone verification',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'We need to register your phone \n number before getting started',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 45,
                 decoration: BoxDecoration(
@@ -58,27 +63,31 @@ class _MyPhoneState extends State<MyPhone> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     SizedBox(
                       width: 40,
                       child: TextField(
                         controller: countrycode,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-                    Text(
+                    const Text(
                       '|',
                       style: TextStyle(
                         fontSize: 30,
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration(
+                        onChanged: (value) {
+                          phone = value;
+                        },
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Phone',
                         ),
@@ -87,18 +96,32 @@ class _MyPhoneState extends State<MyPhone> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SizedBox(
                 height: 40,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'otp');
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.verifyPhoneNumber(
+                        phoneNumber: countrycode.text + phone,
+                        verificationCompleted:
+                            (PhoneAuthCredential credential) {},
+                        verificationFailed: (FirebaseAuthException e) {},
+                        codeSent: (String verificationId, int? resendToken) {
+                          PhoneScreen.verify = verificationId;
+                          Navigator.pushNamed(context, 'otp');
+                        },
+                        codeAutoRetrievalTimeout: (String verificationId) {},
+                      );
+                    } catch (e) {
+                      showSnackBar(context: context, content: e.toString());
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
-                  child: Text('Send the code'),
+                  child: const Text('Send the code'),
                 ),
               ),
             ],
